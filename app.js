@@ -1,5 +1,9 @@
 const myLibrary = [];
 const tbody = document.querySelector('.books-table tbody');
+const addBookBtn = document.querySelector('.addBook');
+const modal = document.querySelector('dialog');
+const closeModalBtn = document.querySelector('.closeModal')
+const submitFormBtn = document.querySelector('.submitForm');
 
 function Book(title, author, pages, releaseYear) {
     this.title = title;
@@ -37,3 +41,22 @@ function displayBooks() {
         tbody.append(newTr);
     }
 }
+
+addBookBtn.addEventListener('click', () => {
+    modal.showModal();
+})
+
+closeModalBtn.addEventListener("click", () => {
+    modal.close();
+})
+
+submitFormBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const title = document.querySelector('#title').value;
+    const author = document.querySelector('#author').value;
+    const pages = document.querySelector('#pages').value;
+    const releaseYear = document.querySelector('#releaseYear').value;
+
+    addBookToLibrary(title, author, pages, releaseYear);
+    modal.close();
+})
