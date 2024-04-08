@@ -19,9 +19,12 @@ function Book(title, author, pages, releaseYear) {
 
 function addBookToLibrary(title, author, pages, releaseYear) {
     myLibrary.push(new Book(title, author, pages, releaseYear));
+    displayBooks();
 }
 
 function displayBooks() {
+    tbody.replaceChildren();
+
     for (let book of myLibrary) {
         const newTr = document.createElement("tr");
         const title = document.createElement("td");
