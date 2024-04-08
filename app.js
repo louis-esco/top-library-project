@@ -25,8 +25,10 @@ function addBookToLibrary(title, author, pages, releaseYear) {
 function displayBooks() {
     tbody.replaceChildren();
 
-    for (let book of myLibrary) {
+    for (let [index, book] of myLibrary.entries()) {
         const newTr = document.createElement("tr");
+        newTr.setAttribute('data-index', index);
+
         const title = document.createElement("td");
         title.textContent = book.title;
         const author = document.createElement("td");
@@ -35,13 +37,22 @@ function displayBooks() {
         pages.textContent = book.pages;
         const releaseYear = document.createElement("td");
         releaseYear.textContent = book.releaseYear;
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Remove";
+        deleteBtn.classList.add('removeBook');
 
         newTr.append(title);
         newTr.append(author);
         newTr.append(pages);
         newTr.append(releaseYear);
+        newTr.append(deleteBtn);
 
         tbody.append(newTr);
+
+        deleteBtn.addEventListener('click', () => {
+            myLibrary.splice(newTr.dataset.index, 1);
+            displayBooks();
+        })
     }
 }
 
