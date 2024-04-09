@@ -2,6 +2,7 @@ const myLibrary = [];
 const tbody = document.querySelector('.books-table tbody');
 const modal = document.querySelector('dialog');
 const addBookBtn = document.querySelector('.addBook');
+const bookForm = document.querySelector('.bookForm');
 const closeModalBtn = document.querySelector('.closeModal')
 const submitFormBtn = document.querySelector('.submitForm');
 
@@ -11,6 +12,15 @@ function Book(title, author, pages, read) {
     this.pages = pages;
     this.read = read;
 }
+
+Book.prototype.toggleReadStatus = function () {
+    if (this.read === "yes") {
+        this.read = "no";
+    } else {
+        this.read = "yes";
+    }
+}
+
 
 function addBookToLibrary(title, author, pages, read) {
     myLibrary.push(new Book(title, author, pages, read));
@@ -31,10 +41,17 @@ function displayBooks() {
         const pages = document.createElement("td");
         pages.textContent = book.pages;
         const read = document.createElement("td");
-        read.textContent = book.read;
+        const readStatus = document.createElement('div');
+        readStatus.textContent = book.read;
+        const readToggle = document.createElement("button");
+        readToggle.textContent = "Change";
+        readToggle.classList.add('toggleReadStatus');
         const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "Remove";
+        deleteBtn.textContent = "⨯";
         deleteBtn.classList.add('removeBook');
+
+        read.append(readStatus);
+        read.append(readToggle);
 
         newTr.append(title);
         newTr.append(author);
@@ -46,6 +63,11 @@ function displayBooks() {
 
         deleteBtn.addEventListener('click', () => {
             myLibrary.splice(newTr.dataset.index, 1);
+            displayBooks();
+        })
+
+        readToggle.addEventListener('click', () => {
+            myLibrary[index].toggleReadStatus();
             displayBooks();
         })
     }
@@ -67,5 +89,6 @@ submitFormBtn.addEventListener('click', (e) => {
     const read = document.querySelector('#read').value;
 
     addBookToLibrary(title, author, pages, read);
+    bookForm.reset();
     modal.close();
 })
