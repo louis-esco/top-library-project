@@ -1,4 +1,5 @@
 const myLibrary = [];
+
 const tbody = document.querySelector('.books-table tbody');
 const modal = document.querySelector('dialog');
 const addBookBtn = document.querySelector('.addBook');
@@ -29,7 +30,11 @@ function addBookToLibrary(title, author, pages, read) {
 
 function displayBooks() {
     tbody.replaceChildren();
+    createBooksTable();
 
+}
+
+function createBooksTable() {
     for (let [index, book] of myLibrary.entries()) {
         const newTr = document.createElement("tr");
         newTr.setAttribute('data-index', index);
