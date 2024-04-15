@@ -1,41 +1,27 @@
-const myLibrary = [];
+class Book {
+    constructor(title, author, pages, read) {
+        this.title = title;
+        this.author = author;
+        this.pages = pages;
+        this.read = read;
+    }
 
-const tbody = document.querySelector('.books-table tbody');
-const modal = document.querySelector('dialog');
-const addBookBtn = document.querySelector('.addBook');
-const bookForm = document.querySelector('.bookForm');
-const closeModalBtn = document.querySelector('.closeModal')
-const submitFormBtn = document.querySelector('.submitForm');
-
-function Book(title, author, pages, read) {
-    this.title = title;
-    this.author = author;
-    this.pages = pages;
-    this.read = read;
-}
-
-Book.prototype.toggleReadStatus = function () {
-    if (this.read === "yes") {
-        this.read = "no";
-    } else {
-        this.read = "yes";
+    toggleReadStatus() {
+        this.read = this.read === "yes" ? "no" : "yes";
     }
 }
 
-
-function addBookToLibrary(title, author, pages, read) {
-    myLibrary.push(new Book(title, author, pages, read));
-    displayBooks();
+function addBookToLibrary(library, title, author, pages, read) {
+    library.push(new Book(title, author, pages, read));
+    displayBooks(library);
 }
 
-function displayBooks() {
+function displayBooks(library) {
+    const tbody = document.querySelector('.books-table tbody');
     tbody.replaceChildren();
     createBooksTable();
 
-}
-
-function createBooksTable() {
-    for (let [index, book] of myLibrary.entries()) {
+    for (let [index, book] of library.entries()) {
         const newTr = document.createElement("tr");
         newTr.setAttribute('data-index', index);
 
@@ -67,33 +53,44 @@ function createBooksTable() {
         tbody.append(newTr);
 
         deleteBtn.addEventListener('click', () => {
-            myLibrary.splice(newTr.dataset.index, 1);
-            displayBooks();
+            library.splice(newTr.dataset.index, 1);
+            displayBooks(library);
         })
 
         readToggle.addEventListener('click', () => {
-            myLibrary[index].toggleReadStatus();
-            displayBooks();
+            library[index].toggleReadStatus();
+            displayBooks(library);
         })
     }
 }
 
-addBookBtn.addEventListener('click', () => {
-    modal.showModal();
-})
+function setupLibrary() {
+    const myLibrary = [];
+    const modal = document.querySelector('dialog');
+    const addBookBtn = document.querySelector('.addBook');
+    const bookForm = document.querySelector('.bookForm');
+    const closeModalBtn = document.querySelector('.closeModal')
+    const submitFormBtn = document.querySelector('.submitForm');
 
-closeModalBtn.addEventListener("click", () => {
-    modal.close();
-})
+    addBookBtn.addEventListener('click', () => {
+        modal.showModal();
+    })
 
-submitFormBtn.addEventListener('click', (e) => {
-    e.preventDefault();
-    const title = document.querySelector('#title').value;
-    const author = document.querySelector('#author').value;
-    const pages = document.querySelector('#pages').value;
-    const read = document.querySelector('#read').value;
+    closeModalBtn.addEventListener("click", () => {
+        modal.close();
+    })
 
-    addBookToLibrary(title, author, pages, read);
-    bookForm.reset();
-    modal.close();
-})
+    submitFormBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const title = document.querySelector('#title').value;
+        const author = document.querySelector('#author').value;
+        const pages = document.querySelector('#pages').value;
+        const read = document.querySelector('#read').value;
+
+        addBookToLibrary(myLibrary, title, author, pages, read);
+        bookForm.reset();
+        modal.close();
+    })
+}
+
+setupLibrary();
